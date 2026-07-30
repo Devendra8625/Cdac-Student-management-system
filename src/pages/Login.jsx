@@ -43,9 +43,6 @@ export default function Login() {
         <p style={styles.sub}>
           Centre for Development of Advanced Computing
           <br />
-          <span style={{ fontSize: "13px" }}>
-            Student Management System
-          </span>
         </p>
 
         {/* ROLE TOGGLE */}
