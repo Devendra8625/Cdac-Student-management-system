@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import logo from "../assets/C-DAC_LogoTransp.png";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 export default function Login() {
   const [role, setRole] = useState("student");
@@ -87,7 +88,7 @@ export default function Login() {
               style={styles.eye}
               onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword ? "🙈" : "👁"}
+            {showPassword ? <FiEyeOff /> : <FiEye />}
             </span>
           </div>
 
