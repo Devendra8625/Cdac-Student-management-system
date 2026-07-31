@@ -8,22 +8,21 @@ export function AuthProvider({ children }) {
   // ✅ Load user from localStorage on refresh
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
+    if (storedUser) setUser(JSON.parse(storedUser));
   }, []);
 
-  // ✅ Login function
-  const login = (role, name) => {
-    const userData = { role, name };
+  const login = (userData, token) => {
     setUser(userData);
+
+    // ✅ Save to localStorage
     localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("token", token);
   };
 
-  // ✅ Logout function
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
   };
 
   return (
