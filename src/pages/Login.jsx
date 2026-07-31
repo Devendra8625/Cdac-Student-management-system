@@ -16,23 +16,20 @@ export default function Login() {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    if (!username) {
+    // ✅ Trim validation (important fix)
+    if (!username.trim()) {
       return alert("Please enter username");
     }
 
-    if (!password) {
+    if (!password.trim()) {
       return alert("Please enter password");
     }
 
-    // Save login info
-    login(role, username);
+    // ✅ Save login (clean input)
+    login(role, username.trim());
 
-    // Redirect based on role
-    if (role === "staff") {
-      navigate("/staff/dashboard");
-    } else {
-      navigate("/student/dashboard");
-    }
+    // ✅ Redirect based on role
+    navigate(role === "staff" ? "/staff/dashboard" : "/student/dashboard");
   };
 
   return (
@@ -42,7 +39,6 @@ export default function Login() {
 
         <p style={styles.sub}>
           Centre for Development of Advanced Computing
-          <br />
         </p>
 
         {/* ROLE TOGGLE */}
@@ -65,7 +61,7 @@ export default function Login() {
         {/* FORM */}
         <form onSubmit={handleLogin} style={styles.form}>
           <input
-            placeholder="Username"
+            placeholder="Enter username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             style={styles.input}
@@ -74,18 +70,18 @@ export default function Login() {
           <div style={styles.passwordWrapper}>
             <input
               type={showPassword ? "text" : "password"}
-              placeholder="Password"
+              placeholder="Enter password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               style={styles.input}
             />
 
-            {/* SHOW/HIDE PASSWORD */}
+            {/* 👁 Professional Eye Icon */}
             <span
               style={styles.eye}
               onClick={() => setShowPassword(!showPassword)}
             >
-            {showPassword ? <FiEyeOff /> : <FiEye />}
+              {showPassword ? <FiEyeOff /> : <FiEye />}
             </span>
           </div>
 
@@ -95,12 +91,18 @@ export default function Login() {
             </label>
           </div>
 
-          <button type="submit" style={styles.submitBtn}>
+          {/* ✅ BUTTON WITH HOVER */}
+          <button
+            type="submit"
+            style={styles.submitBtn}
+            onMouseEnter={(e) => (e.target.style.opacity = "0.9")}
+            onMouseLeave={(e) => (e.target.style.opacity = "1")}
+          >
             Login as {role.charAt(0).toUpperCase() + role.slice(1)}
           </button>
         </form>
 
-        {/* ✅ REGISTER LINK (ADDED) */}
+        {/* REGISTER */}
         <p style={styles.registerText}>
           Don’t have an account?{" "}
           <Link to="/register" style={styles.registerLink}>
@@ -108,9 +110,7 @@ export default function Login() {
           </Link>
         </p>
 
-        <p style={styles.footer}>
-          CDAC ACTS Pune © 2026
-        </p>
+        <p style={styles.footer}>CDAC ACTS Pune © 2026</p>
       </div>
     </div>
   );
@@ -198,8 +198,8 @@ const styles = {
     top: "50%",
     transform: "translateY(-50%)",
     cursor: "pointer",
-    userSelect: "none",
     fontSize: "18px",
+    color: "#64748b",
   },
 
   rememberContainer: {
@@ -217,9 +217,9 @@ const styles = {
     fontWeight: "600",
     fontSize: "16px",
     marginTop: "8px",
+    transition: "0.3s",
   },
 
-  /* ✅ NEW STYLES */
   registerText: {
     textAlign: "center",
     marginTop: "15px",

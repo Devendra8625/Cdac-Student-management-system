@@ -1,72 +1,40 @@
+import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import { Users, BookOpen, Award, Briefcase, ClipboardList, Bell } from "lucide-react";
 
 export default function StaffDashboard() {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
-  // ✅ Only include routes that EXIST
   const modules = [
-    {
-      name: "Students",
-      desc: "Manage student records",
-      icon: <Users size={32} />,
-      path: "/staff/students",
-      color: "#3b82f6"
-    },
-    {
-      name: "Marks",
-      desc: "Add and update marks",
-      icon: <BookOpen size={32} />,
-      path: "/staff/marks",
-      color: "#22c55e"
-    },
-    {
-      name: "Grades",
-      desc: "Manage grades",
-      icon: <Award size={32} />,
-      path: "/staff/grades",
-      color: "#f59e0b"
-    },
-    {
-      name: "Placement",
-      desc: "Manage placements",
-      icon: <Briefcase size={32} />,
-      path: "/staff/placement",
-      color: "#8b5cf6"
-    },
-    {
-      name: "Attendance",
-      desc: "Mark attendance",
-      icon: <ClipboardList size={32} />,
-      path: "/staff/attendance",
-      color: "#ef4444"
-    },
-    {
-      name: "Notifications",
-      desc: "Post announcements",
-      icon: <Bell size={32} />,
-      path: "/staff/notifications",
-      color: "#ec4899"
-    }
+    { name:"Students", desc:"Manage student records", icon:<Users size={30}/>, path:"/staff/students", color:"#3b82f6" },
+    { name:"Marks", desc:"Add and update marks", icon:<BookOpen size={30}/>, path:"/staff/marks", color:"#22c55e" },
+    { name:"Grades", desc:"Manage grades", icon:<Award size={30}/>, path:"/staff/grades", color:"#f59e0b" },
+    { name:"Placement", desc:"Manage placements", icon:<Briefcase size={30}/>, path:"/staff/placement", color:"#8b5cf6" },
+    { name:"Attendance", desc:"Mark attendance", icon:<ClipboardList size={30}/>, path:"/staff/attendance", color:"#ef4444" },
+    { name:"Notifications", desc:"Post announcements", icon:<Bell size={30}/>, path:"/staff/notifications", color:"#ec4899" }
   ];
 
-  const activity = [
-    "Attendance updated",
-    "Marks uploaded",
-    "Grades updated"
-  ];
+  const activity = ["Attendance updated", "Marks uploaded", "Grades updated"];
 
   return (
     <div>
       <Navbar />
 
       <div style={styles.container}>
-        <h1 style={styles.heading}>Welcome Back, Staff</h1>
-        <p style={styles.subHeading}>
-          Manage students, attendance, marks and placements.
-        </p>
+        
+        {/* HEADER */}
+        <div style={styles.header}>
+          <h1 style={styles.heading}>
+            Welcome back, <span style={styles.name}>{user?.name || "Staff"}</span> 👋
+          </h1>
+          <p style={styles.subHeading}>
+            Manage students, attendance, marks, and placements efficiently.
+          </p>
+        </div>
 
+        {/* QUICK ACCESS */}
         <h2 style={styles.title}>Quick Access</h2>
 
         <div style={styles.grid}>
@@ -75,6 +43,8 @@ export default function StaffDashboard() {
               key={index}
               style={styles.card}
               onClick={() => navigate(item.path)}
+              onMouseEnter={(e) => e.currentTarget.style.transform = "translateY(-5px)"}
+              onMouseLeave={(e) => e.currentTarget.style.transform = "translateY(0)"}
             >
               <div style={{ color: item.color }}>{item.icon}</div>
               <h3 style={styles.cardTitle}>{item.name}</h3>
@@ -83,16 +53,17 @@ export default function StaffDashboard() {
           ))}
         </div>
 
+        {/* BOTTOM SECTION */}
         <div style={styles.bottom}>
           <div style={styles.box}>
-            <h2>Recent Activity</h2>
+            <h2 style={styles.boxTitle}>Recent Activity</h2>
             {activity.map((item, index) => (
               <p key={index} style={styles.text}>✅ {item}</p>
             ))}
           </div>
 
           <div style={styles.box}>
-            <h2>Notifications</h2>
+            <h2 style={styles.boxTitle}>Notifications</h2>
             <p style={styles.text}>📌 No recent updates available</p>
           </div>
         </div>
@@ -108,19 +79,30 @@ const styles = {
     minHeight: "100vh"
   },
 
+  header: {
+    marginBottom: "25px"
+  },
+
   heading: {
     marginBottom: "5px",
-    color: "#1e293b"
+    color: "#1e293b",
+    fontSize: "26px",
+    fontWeight: "700"
+  },
+
+  name: {
+    color: "#6366f1"
   },
 
   subHeading: {
     color: "#64748b",
-    marginBottom: "30px"
+    fontSize: "15px"
   },
 
   title: {
     color: "#1e293b",
-    marginBottom: "20px"
+    marginBottom: "20px",
+    fontWeight: "600"
   },
 
   grid: {
@@ -135,13 +117,15 @@ const styles = {
     borderRadius: "15px",
     textAlign: "center",
     cursor: "pointer",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
+    boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+    transition: "0.3s"
   },
 
   cardTitle: {
-    marginTop: "15px",
-    marginBottom: "8px",
-    color: "#1e293b"
+    marginTop: "12px",
+    marginBottom: "6px",
+    color: "#1e293b",
+    fontWeight: "600"
   },
 
   cardText: {
@@ -152,19 +136,27 @@ const styles = {
   bottom: {
     display: "flex",
     gap: "20px",
-    marginTop: "35px"
+    marginTop: "35px",
+    flexWrap: "wrap"
   },
 
   box: {
     flex: 1,
+    minWidth: "280px",
     background: "#fff",
     borderRadius: "15px",
     padding: "25px",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
+    boxShadow: "0 4px 12px rgba(0,0,0,0.08)"
+  },
+
+  boxTitle: {
+    color: "#1e293b",
+    fontWeight: "600"
   },
 
   text: {
     color: "#475569",
-    marginTop: "15px"
+    marginTop: "12px",
+    fontSize: "14px"
   }
 };
