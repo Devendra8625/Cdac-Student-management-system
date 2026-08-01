@@ -5,24 +5,24 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
-  // ✅ Load user from localStorage on refresh
+  // ✅ Load user from localStorage
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    if (storedUser) setUser(JSON.parse(storedUser));
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
   }, []);
 
-  const login = (userData, token) => {
+  // ✅ FIXED LOGIN (NO TOKEN)
+  const login = (userData) => {
     setUser(userData);
-
-    // ✅ Save to localStorage
     localStorage.setItem("user", JSON.stringify(userData));
-    localStorage.setItem("token", token);
   };
 
+  // ✅ LOGOUT
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
-    localStorage.removeItem("token");
   };
 
   return (

@@ -16,7 +16,6 @@ export default function Login() {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    // ✅ Trim validation (important fix)
     if (!username.trim()) {
       return alert("Please enter username");
     }
@@ -25,11 +24,18 @@ export default function Login() {
       return alert("Please enter password");
     }
 
-    // ✅ Save login (clean input)
-    login(role, username.trim());
+    // ✅ CORRECT LOGIN FORMAT (FIXED)
+    login({
+      name: username.trim(),
+      role: role,
+    });
 
     // ✅ Redirect based on role
-    navigate(role === "staff" ? "/staff/dashboard" : "/student/dashboard");
+    navigate(
+      role === "staff"
+        ? "/staff/dashboard"
+        : "/student/dashboard"
+    );
   };
 
   return (
@@ -76,7 +82,6 @@ export default function Login() {
               style={styles.input}
             />
 
-            {/* 👁 Professional Eye Icon */}
             <span
               style={styles.eye}
               onClick={() => setShowPassword(!showPassword)}
@@ -91,18 +96,20 @@ export default function Login() {
             </label>
           </div>
 
-          {/* ✅ BUTTON WITH HOVER */}
+          {/* ✅ DISABLED BUTTON IF EMPTY */}
           <button
             type="submit"
-            style={styles.submitBtn}
-            onMouseEnter={(e) => (e.target.style.opacity = "0.9")}
-            onMouseLeave={(e) => (e.target.style.opacity = "1")}
+            disabled={!username || !password}
+            style={{
+              ...styles.submitBtn,
+              opacity: !username || !password ? 0.6 : 1,
+              cursor: !username || !password ? "not-allowed" : "pointer",
+            }}
           >
             Login as {role.charAt(0).toUpperCase() + role.slice(1)}
           </button>
         </form>
 
-        {/* REGISTER */}
         <p style={styles.registerText}>
           Don’t have an account?{" "}
           <Link to="/register" style={styles.registerLink}>
@@ -213,7 +220,6 @@ const styles = {
     color: "#fff",
     border: "none",
     borderRadius: "10px",
-    cursor: "pointer",
     fontWeight: "600",
     fontSize: "16px",
     marginTop: "8px",
