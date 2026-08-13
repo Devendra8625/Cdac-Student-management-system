@@ -1,0 +1,12 @@
+{
+  "name": "cdac-student-management-system-wrapper",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "npm --prefix Cdac-Student-management-system-main start",
+    "build": "npm --prefix Cdac-Student-management-system-main run build",
+    "test": "npm --prefix Cdac-Student-management-system-main test"
+  },
+  "dependencies": {
+    "pptxgenjs": "^4.0.1"
+  }
+}

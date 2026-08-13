@@ -1,0 +1,197 @@
+services:
+  # 0. MySQL Database Container (Optional local/EC2 container fallback)
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS:-root}
+      MYSQL_DATABASE: ${DB_NAME:-cdac_sms_db}
+      MYSQL_USER: ${DB_USER:-cdacuser}
+      MYSQL_PASSWORD: ${DB_PASS:-cdacpass}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  # 1. Eureka Service Registry
+  service-registry:
+    build:
+      context: .
+      dockerfile: service-registry/Dockerfile
+    container_name: service-registry
+    restart: always
+    ports:
+      - "8761:8761"
+
+  # 2. API Gateway
+  api-gateway:
+    build:
+      context: .
+      dockerfile: api-gateway/Dockerfile
+    container_name: api-gateway
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - service-registry
+
+  # 3. Auth Microservice
+  auth-service:
+    build:
+      context: .
+      dockerfile: auth-service/Dockerfile
+    container_name: auth-service
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://${DB_HOST:-mysql-db}:3306/${DB_NAME:-cdac_sms_db}?createDatabaseIfNotExist=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=${DB_USER:-root}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASS:-root}
+    depends_on:
+      - mysql-db
+      - service-registry
+
+  # 4. Student Microservice
+  student-service:
+    build:
+      context: .
+      dockerfile: student-service/Dockerfile
+    container_name: student-service
+    restart: always
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://${DB_HOST:-mysql-db}:3306/${DB_NAME:-cdac_sms_db}?createDatabaseIfNotExist=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=${DB_USER:-root}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASS:-root}
+    depends_on:
+      - mysql-db
+      - service-registry
+
+  # 5. Course Microservice
+  course-service:
+    build:
+      context: .
+      dockerfile: course-service/Dockerfile
+    container_name: course-service
+    restart: always
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://${DB_HOST:-mysql-db}:3306/${DB_NAME:-cdac_sms_db}?createDatabaseIfNotExist=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=${DB_USER:-root}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASS:-root}
+    depends_on:
+      - mysql-db
+      - service-registry
+
+  # 6. Marks Microservice
+  marks-service:
+    build:
+      context: .
+      dockerfile: marks-service/Dockerfile
+    container_name: marks-service
+    restart: always
+    ports:
+      - "8084:8084"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://${DB_HOST:-mysql-db}:3306/${DB_NAME:-cdac_sms_db}?createDatabaseIfNotExist=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=${DB_USER:-root}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASS:-root}
+    depends_on:
+      - mysql-db
+      - service-registry
+
+  # 7. Attendance Microservice
+  attendance-service:
+    build:
+      context: .
+      dockerfile: attendance-service/Dockerfile
+    container_name: attendance-service
+    restart: always
+    ports:
+      - "8085:8085"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://${DB_HOST:-mysql-db}:3306/${DB_NAME:-cdac_sms_db}?createDatabaseIfNotExist=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=${DB_USER:-root}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASS:-root}
+    depends_on:
+      - mysql-db
+      - service-registry
+
+  # 8. Assignment Microservice
+  assignment-service:
+    build:
+      context: .
+      dockerfile: assignment-service/Dockerfile
+    container_name: assignment-service
+    restart: always
+    ports:
+      - "8086:8086"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://${DB_HOST:-mysql-db}:3306/${DB_NAME:-cdac_sms_db}?createDatabaseIfNotExist=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=${DB_USER:-root}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASS:-root}
+    depends_on:
+      - mysql-db
+      - service-registry
+
+  # 9. Notice Microservice
+  notice-service:
+    build:
+      context: .
+      dockerfile: notice-service/Dockerfile
+    container_name: notice-service
+    restart: always
+    ports:
+      - "8087:8087"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://${DB_HOST:-mysql-db}:3306/${DB_NAME:-cdac_sms_db}?createDatabaseIfNotExist=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=${DB_USER:-root}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASS:-root}
+    depends_on:
+      - mysql-db
+      - service-registry
+
+  # 10. Placement Microservice
+  placement-service:
+    build:
+      context: .
+      dockerfile: placement-service/Dockerfile
+    container_name: placement-service
+    restart: always
+    ports:
+      - "8088:8088"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://${DB_HOST:-mysql-db}:3306/${DB_NAME:-cdac_sms_db}?createDatabaseIfNotExist=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=${DB_USER:-root}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASS:-root}
+    depends_on:
+      - mysql-db
+      - service-registry
+
+  # 11. Feedback Microservice
+  feedback-service:
+    build:
+      context: .
+      dockerfile: feedback-service/Dockerfile
+    container_name: feedback-service
+    restart: always
+    ports:
+      - "8089:8089"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://${DB_HOST:-mysql-db}:3306/${DB_NAME:-cdac_sms_db}?createDatabaseIfNotExist=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=${DB_USER:-root}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASS:-root}
+    depends_on:
+      - mysql-db
+      - service-registry
+
+volumes:
+  mysql-data:
+
+networks:
+  default:
+    name: cdac-microservices-net

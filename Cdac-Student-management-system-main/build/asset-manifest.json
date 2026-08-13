@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/static/css/main.7323fee1.css",
+    "main.js": "/static/js/main.1cf643e5.js",
+    "static/media/C-DAC_LogoTransp.png": "/static/media/C-DAC_LogoTransp.59b05f34d2b2abda739d.png",
+    "index.html": "/index.html",
+    "main.7323fee1.css.map": "/static/css/main.7323fee1.css.map",
+    "main.1cf643e5.js.map": "/static/js/main.1cf643e5.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7323fee1.css",
+    "static/js/main.1cf643e5.js"
+  ]
+}
