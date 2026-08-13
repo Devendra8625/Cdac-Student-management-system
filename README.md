@@ -249,9 +249,3 @@ All client HTTP requests should be routed through the API Gateway at `http://loc
 ## 👥 Contributors
 
 - **Devendra** ([@Devendra8625](https://github.com/Devendra8625))
-
----
-
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE) - see the LICENSE file for details.
